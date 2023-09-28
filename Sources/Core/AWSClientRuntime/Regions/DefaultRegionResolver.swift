@@ -12,7 +12,7 @@ public struct DefaultRegionResolver: RegionResolver {
     let logger: SwiftLogger
 
     public init(providers: [RegionProvider]? = nil) throws {
-        #if os(iOS) || os(watchOS) || os(tvOS)
+        #if os(iOS) || os(watchOS) || os(tvOS) || os(visionOS)
         self.providers = providers ?? [BundleRegionProvider(), EnvironmentRegionProvider()]
         #else
         self.providers = try providers ?? [

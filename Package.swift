@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version: 5.9
 
 //
 // Copyright Amazon.com Inc. or its affiliates.
@@ -13,15 +13,16 @@
 import Foundation
 import PackageDescription
 
-let smithyTestUtil = PackageDescription.Target.Dependency.product(name: "SmithyTestUtil", package: "smithy-swift")
-let clientRuntime = PackageDescription.Target.Dependency.product(name: "ClientRuntime", package: "smithy-swift")
+let smithyTestUtil = PackageDescription.Target.Dependency.product(name: "SmithyTestUtil", package: "smithy-swift_visionos")
+let clientRuntime = PackageDescription.Target.Dependency.product(name: "ClientRuntime", package: "smithy-swift_visionos")
 let awsCommonRuntimeKit = PackageDescription.Target.Dependency.product(name: "AwsCommonRuntimeKit", package: "aws-crt-swift")
 
 let package = Package(
     name: "aws-sdk-swift",
     platforms: [
         .macOS(.v10_15),
-        .iOS(.v13)
+        .iOS(.v13),
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "AWSClientRuntime", targets: ["AWSClientRuntime"]),
@@ -1068,19 +1069,6 @@ let package = Package(
 let useLocalDeps = ProcessInfo.processInfo.environment["AWS_SWIFT_SDK_USE_LOCAL_DEPS"] != nil
 let useMainDeps = ProcessInfo.processInfo.environment["AWS_SWIFT_SDK_USE_MAIN_DEPS"] != nil
 
-switch (useLocalDeps, useMainDeps) {
-case (true, true):
-    fatalError("Unable to determine which dependencies to use. Please only specify one of AWS_SWIFT_SDK_USE_LOCAL_DEPS or AWS_SWIFT_SDK_USE_MAIN_DEPS.")
-case (true, false):
-    package.dependencies += [
-        .package(path: "../smithy-swift")
-    ]
-case (false, true):
-    package.dependencies += [
-        .package(url: "https://github.com/awslabs/smithy-swift", branch: "main")
-    ]
-case (false, false):
-    package.dependencies += [
-        .package(url: "https://github.com/awslabs/smithy-swift", .exact("0.15.0"))
-    ]
-}
+package.dependencies += [
+    .package(url: "https://github.com/MuniekMg/smithy-swift_VisionOS", branch: "visionos")
+]
